@@ -1,0 +1,1015 @@
+ngnix的常用命令 1.必须进入ngnix目录下/usr/local/ngnix/sbin
+                          2./nginx -v 查看版本号
+	          3./nginx -s stop 关闭nginx
+	          4./nginx 启动nginx
+	          5./nginx -s reload 重新加载Nginx
+/* 改变页数 */
+    sizeChange(size) {
+      if (this.page.pageNumber != size) {
+        this.page.pageNumber = size;
+         this.getOrigindata()
+      }
+    },
+    /* 改变页码 */
+    currentChange(page) {
+      this.page.currentPage = page;
+       this.getOrigindata()
+    },
+$set（this.data,”key”,value’）为对象新增属性
+ this.$nextTick(() => {
+      //       this.$set(this.dialogForm, "code", res.result);
+      //     });
+0.实现图片上传裁剪功能（易法后台管理系统教师模块有 引用 vue-copoper插件）
+1.小程序图片在本地显示在手机预览上无法显示
+ 原因：可能是图片的命名规则（把中文改成英文）
+2.小程序开发中在其它手机上可以显示在iphoneX上无法显示
+原因：可能因为iphoneX自身的高度，当你设置的高度无法达到时会出现空白区域解决方法在最外层div时加一个min-height:100vh
+3.当每点击一个下拉选项时都会触发一个请求，此时可以通过watch来进行监听：把下拉选项通过v-model=“dialogForm.codeType”
+ watch: {
+    "dialogForm.codeType"(val) {
+      this.dialogForm = Object.assign({}, this.dialogForm, { resourceId: "" });
+      switch (val) {
+        case "1":
+          this.getAllLesson();
+          break;
+        case "2":
+          this.getAllVip();
+          break;
+        case "3":
+          this.getAllExclu();
+          break;
+      }
+    }
+  },
+4.当你给data中的一个变量赋值时 在其它地方没有生效，可能是存在this指向问题，this指向其最近的实例对象
+可以 let _this = this
+5.截取字符串res.result="xiachuande?sid=5fc376d6-47b7-4d44-ade1-27705f80233e"
+substring:从一个指定位置到另一个指定位置之间的值。indexOf() 查询元素 -》查到返回当前元素对应的索引 否则返回-1
+let result = {
+     sid:res.result.substring(res.result.indexOf("=")+1,res.result.length)
+}
+
+6.时间过滤器：	使用方法：{{scope.row.opreationTime | formDate('yyyy-MM-dd hh:mm:ss')}}
+Vue.filter('formDate', function(val, fmt) {
+    var value = new Date(Number(val));
+    var o = {
+        "M+": value.getMonth() + 1, // 月份
+        "d+": value.getDate(), // 日
+        "h+": value.getHours(), // 小时
+        "m+": value.getMinutes(), // 分
+        "s+": value.getSeconds(), // 秒
+        "q+": Math.floor((value.getMonth() + 3) / 3), // 季度
+        "S": value.getMilliseconds()
+            // 毫秒
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (value.getFullYear() + "")
+            .substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+});
+在使用moment时可以
+Vue.filter('date_format', (value, fmt = 'YYYY-MM-DD HH:mm:ss') => {
+  if (!value) return '';
+  return moment(value).format(fmt);
+});
+7.星期
+Vue.filter('formDateToWeek', function(val) {
+    var value = new Date(Number(val));
+    var arr = ['日', '一', '二·', '三', '四', '五', '六'];
+    return '星期' + arr[value.getDay()];
+});
+a.使用element中的时间多少至多少 可以使用：（可以在本模块或实例中定义一个函数 例如：var Format = function()直接使用函数名）
+obj.startDateString = length ? _this.queryForm.creatTime[0].Format("yyyy-MM-dd") : null;
+ obj.endDateString = length ? _this.queryForm.creatTime[1].Format("yyyy-MM-dd") : null;
+
+Date.prototype.Format = function (fmt) { // author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, // 月份
+        "d+": this.getDate(), // 日
+        "h+": this.getHours(), // 小时
+        "m+": this.getMinutes(), // 分
+        "s+": this.getSeconds(), // 秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+        "S": this.getMilliseconds()
+        // 毫秒
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "")
+            .substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
+b.//将中国标准时间转换为年月日格式  ----开始
+function formatTen(num) {
+  return num > 9 ? (num + "") : ("0" + num);
+}
+function formatDate(date) {
+  var time = new Date(date)
+  // console.log("==formatDate()==" + time)
+  var year = time.getFullYear();
+  var month = time.getMonth() + 1;
+  var day = time.getDate();
+  var hour = time.getHours();
+  var minute = time.getMinutes();
+  var second = time.getSeconds();
+  return year + "-" + formatTen(month);
+}和Date.prototype.Format = function (fmt){}效果一样
+8.动态绑定style：
+	<span :style=" scope.row.srcLang=='中'|| scope.row.srcLang=='英'?'':'color:red'">{{scope.row.srcLang}}</span>
+9.动态绑定class：
+	<li :class="{'on':tabStatus== 17}" @click="handelClickChangeStatus(17)"></li>或者绑定数组
+										
+10.动态绑定类（class）根据不同的状态（条件）来进行不同的（颜色）需求；可以在computed计算属性中定义一个函数
+<el-table-column prop="orderStatus" label="订单状态" width="100">
+	<template slot-scope="scope">
+		<span :style="statusColorClass(scope.row.status)">{{ scope.row.orderStatus }}</span>							
+	</template>						
+</el-table-column>	
+
+computed：{
+       statusColorClass: function (status) {
+            var color = '#000';
+
+            switch (status) {
+                case 1:
+                    color = '#FD7400';
+                    break;
+                case 4:
+                    color = 'green';
+                    break;
+                case 5:
+                    color = 'green';
+                    break;
+                case 6:
+                    color = 'green';
+                    break;
+                case 7:
+                    color = '#909399';
+                    break;
+                case 8:
+                    color = '#909399';
+                    break;
+                case 9:
+                    color = '#FD7400';
+                    break;
+                case 11:
+                    color = '#FD7400';
+                    break;
+                case 12:
+                    color = '#FD7400';
+                    break;
+                case 13:
+                    color = 'green';
+                    break;
+                case 17:
+                    color = 'rgba(169, 14, 3, 0.6)';
+                    break;
+                default:
+                    break;
+            }
+            return {
+                color: color,
+                'text-aligh': 'center',
+                'font-weight': 'bold'
+            };
+        },
+}	
+
+11.获取某数组中的某些字段
+
+let arr = [ ]
+for(var i = 0;i <list.length; i++){
+	//每循环一次打印一个对象obj,(如 list的长度为5，则打印5个对象）
+	var obj = {
+	      text:list[i].orgName,
+	      value:list[i].ordId
+
+         }
+	arr.push(obj)
+}
+或者可以写成：
+
+let arr = [ ]
+for(var i = 0 ; i<list.lenght; i++){
+	var text = list[i].orgName
+	var value = list[i].ordid
+	arr.push(
+		{
+                              "text":text,
+		"value":value
+                               }
+
+                     )
+}
+
+let grouplist = [ ]
+
+this.selectionList.forEach((item,index) => {
+	let obj = {
+	    orgid = item,orgid,
+	    orgname = item.orgname,
+	    orgphone = item.orgphone
+}
+	grouplist.push(obj}
+})
+12.导入（Excel，图片，文件等）可以使用<el-upload>或者是原始写法。
+a.当使用<el-upload>时需要一个URL地址 和 配置headers（通常情况下为sid和token=$.cookie()）
+headers: {
+        sid: getCookies("lawtrain_sid"),
+        Authorization: getCookies("lawtrain_auth")
+      },	如果需要传入参数 
+  则可以使用:data="{'userId':userId,'reportName':formInline.reportName}"
+b.当使用原始写法时<input type="file">
+
+  multiFileUpload: function() {
+        //   var $batchs = $("#batch").prop('files');
+        //   // 是否上传了文件
+        //   if ($batchs.length == 0) {
+        //       // 提示信息
+        //       layer.alert("请选择文件", {
+        //           title: "错误",
+        //           icon: 0
+        //       });
+        //       return;
+        //   }
+        //   var fd = new FormData();
+        //   fd.append("file", $batchs[0]);
+        //   authHttp(function() {
+        //       $.ajax({
+        //           // url: FINANCE_URL + "/finance/insertByFile.do",
+        //           url: FINANCE_URL + "/finance/insert_By_File.do",
+        //           type: "POST",
+        //           // dataType: "json",
+        //           headers: {
+        //               Accept: "*/*"
+        //           },
+        //           data: fd,
+        //           cache: false,
+        //           contentType: false,
+        //           processData: false,
+        //           forceSync: false,
+        //           xhr: function() {
+        //               debugger;
+        //               var xhrobj = $.ajaxSettings.xhr();
+        //               if (xhrobj.upload) {
+        //                   xhrobj.upload.addEventListener('progress', function(event) {
+        //                       var percent = 0;
+        //                       var position = event.loaded || event.position;
+        //                       var total = event.total || event.totalSize;
+        //                       if (event.lengthComputable) {
+        //                           percent = Math.ceil(position / total * 100);
+        //                       }
+        //                   }, false);
+        //               }
+
+        //               return xhrobj;
+        //           },
+        //           beforeSend: function(request) {
+        //               request.setRequestHeader("sid", sid);
+        //               request.setRequestHeader("Authorization", $.cookie('access_token'));
+        //           },
+        //           success: function(data, message, xhr) {
+        //               //提示信息
+        //               if ($.common.validateResult(data)) {
+        //                   layer.alert("文件上传成功!")
+        //                   window.location.href = CONSOLE_URL + "/console/pages/dailyRegistration.html?sid=" + sid;
+        //                   // window.location.reload();
+
+        //               }
+
+        //           },
+        //           error: function(xhr, status, errMsg) {
+        //               // alert()
+        //           },
+        //           complete: function(xhr, textStatus) {
+        //               // alert()
+
+        //           }
+        //       });
+        //   })
+      },
+	
+13.导出（Excel，doc,图片等）其实就是根据后台的参数要求进行路径的拼接（其实就是实现一个页面的跳转）
+ 类似这种组合：let commonStr = `&codeType=${codeType}&flag=${flag}&codeIndate=${codeIndate}` ;
+  authHttp(function(){
+           //第一种导出方法
+              var link = FINANCE_URL + '/finance/outExcelAdminCheckBill.do?sid=' + sid + creatTime + deadline + clientName + clientVolumnNo + orderNo + originOrgName +'&access_token='+$.cookie('access_token');
+              window.open(link);
+          //第二种导出方法
+              // window.location.href = FINANCE_URL + '/finance/outExcelAdminCheckBill.do?sid=' + sid + creatTime + deadline + clientName + clientVolumnNo + orderNo + originOrgName +'&access_token='+$.cookie('access_token');
+          })	
+
+  let auth = getCookies("lawtrain_auth");
+      auth = auth.replace("Bearer ", "");
+      let commonStr = "";
+      let nickName = this.formInline.nickName ? this.formInline.nickName : null;
+      nickName ? (commonStr += `&nickName=${nickName}`) : null;
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `${
+              baseUrl.serviceUrl
+            }/yjz-user/lawtrain/commonUser/userInfoExcelOut.do?sid=${getCookies(
+              "lawtrain_sid"
+            )}&access_token=${auth}${commonStr}`
+          : `/yjz-user/lawtrain/commonUser/userInfoExcelOut.do?&sid=${getCookies(
+              "lawtrain_sid"
+            )}&access_token=${auth}${commonStr}`;
+14.（易之后台）当控制台报415时 有可能在发送$.ajax请求时 没有设置请求头部headers：
+	headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'sid': sid
+                },
+当出现400错误时 请求参数为undefined=&undefined= 可能是没有进行转译 JSON.stringify(_this.ids),
+
+
+15.JS方法封装获取URL上的参数字段
+http://localhost:8086/console/pages/financialStatisticsDetail.html?sid=a0c04989-b880-4af6-a8dc-cc5aed4ef113&type1=校审&type2=审校员&type=7
+
+
+ function GetQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配            
+      var context = "";
+      if (r != null)
+        context = r[2];
+      reg = null;
+      r = null;
+      return context == null || context == "" || context == "undefined" ? "" : context;
+    }
+
+    this.type1 = decodeURI(GetQueryString("type1"));
+    this.type2 = decodeURI(GetQueryString("type2"));
+    this.type = GetQueryString("type");	
+
+或者可以封装成：var sid = $getUrlParam("sid")
+  $.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)
+            return unescape(r[2]);
+        return null;
+    }	
+
+
+16.批量操作（删除 下载 等）可以封装一个函数来接收选中的值
+
+	function clientsToString(clients, key) {
+	var arr = [];
+	$.each(clients, function(index, val) {
+		var clientVal = val[key];
+		arr.push(clientVal);
+	});
+
+	return arr.join(',');
+}
+
+使用：var arr = clientsToString(this.multipleSelection, 'jobId');	
+
+	var link =TASK_URL +'/task/batch_choose_download_src.do?sid=' +sid +'&jobIds=' +arr +'&access_token=' +$.cookie('access_token');
+	window.open(link);						
+						
+						
+17.图片预览的操作 在刚开始定义一个div 其中放img标签
+
+	<div :id="'job-'+parentscope.row.jobId" style="display: none;">
+	        
+	<img
+													
+	   :id="'task-'+img.taskId"
+	   :src="img.srcFilePath"
+	   v-for="img in parentscope.row.tasks"
+	   :data-src="img.srcFilePath"
+	   :data-fileName="img.srcfilename"
+	   :data-type="img.fileType"
+	   :fileid="img.taskId"/>			
+               </div>						
+						
+
+
+<el-table-column label="原文" width="170">
+<template scope="scope">
+     <span
+	class="f-te"
+	:title="scope.row.srcfilename"
+	:taskId="scope.row.taskId"
+	>{{ scope.row.srcfilename }}</span>
+				
+</template>
+</el-table-column>
+<el-table-column label="译文" width="270">
+	<template scope="scope">
+	   <span
+		class="f-te"
+                                 :title="scope.row.targetName"
+		:taskId="scope.row.taskId"
+		>{{ scope.row.targetName ? scope.row.targetName : '没有译文'
+		}}</span>
+					
+	</template>
+</el-table-column>					
+		
+js操作：
+
+handleCellClick: function(row, column, cell, event) {
+    debugger;
+    console.log(column);
+	//
+if (column.label == '原文' || column.label == '译文') {
+var FileType = '',
+     FileName = '',
+     FilePath = '';
+    if (column.label == '原文') {
+	FileType = row.fileType;
+	FileName = row.srcfilename;
+	FilePath = row.srcFilePath;
+  } else {
+	FileType = 'word';
+	FileName = row.targetName;
+	FilePath = row.targetPath;
+	}
+                var $target = $(cell).find('.f-te');
+	var taskId = $target.attr('taskId');
+
+	if ((FileType == 'word' || FileType == 'pdf') && FilePath) {
+	 layer.open({
+	     title: FileName,
+	     type: 2,
+	    // content:$(e.target).data('url'),
+	    content: FilePath,
+	    shadeClose: true,
+	   area: [window.innerWidth - 100 + 'px', window.innerHeight - 100 + 'px'],
+	   offset: '10px',
+	   maxmin: true,
+	  resize: true
+	  });
+	} else {
+	$('#task-' + taskId).click();
+		}
+	}
+},				
+		
+18.按下enter建触发：	@keyup.enter.native="filterContentTypes"
+场景：一个输入框 当你输入内容时可以按下enter搜索或按钮搜索  此时输入框下边对应的事折叠面板 刚开始全部折叠 当输入搜索内容时 对应的折叠框展开（第一行。第二行等）
+        主要思想就是绑定折叠面板的activeName的值
+	filterContentTypes: function() {
+			var self = this;
+			var val = self.searchContentTypeName;//输入框中要输入的值
+			var contentTypes = self.contentTypes2;//事先定义好的一个空数组用来绑定折叠面板折叠时的数据（里面还去折叠面板展开时的数据）
+			var cpy_contentTypes = [];
+			if (val == '') {
+				self.contentTypes = self.contentTypes2;
+				self.activeNames = [];//折叠面板展开时的数据
+				return;
+			}
+			contentTypes.forEach(function(el, index) {
+				if (el.contentSubDics.length > 0) {
+					var arr = [];
+					el.contentSubDics.forEach(function(el, index) {
+						if (el.contentTypeName.indexOf(val) != -1) {
+							arr.push(el);
+						}
+					});
+
+					if (arr.length > 0) {
+						cpy_contentTypes.push({
+							contentName: contentTypes[index].contentName,
+							contentSubDics: arr
+						});
+					}
+				}
+			});
+			console.log(cpy_contentTypes);
+
+			cpy_contentTypes.forEach(function(el, index) {
+				self.activeNames.push(index);//当按下搜索是确定展开几行
+			});
+
+			console.log(self.activeNames);
+
+			self.contentTypes = cpy_contentTypes;
+		},	
+
+			
+19.//常用校验
+function checkStr(str, type) {
+	switch (type) {
+		case 'plus': //判断是否是正数
+			return /^\d+(?=\.{0,1}\d+$|$)/.test(str);
+		case 'float':
+			return !/^\d+(\.\d+)?$/.test(str); //非负浮点数
+		case 'phone': //手机号码
+			return /^1[3|4|5|6|7|8][0-9]{9}$/.test(str);
+		case 'tel': //座机
+			return /^(0\d{2,3}-\d{7,8})(-\d{1,4})?$/.test(str);
+		case 'card': //身份证
+			return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str);
+		// case 'pwd': //密码以字母开头，长度在6~18之间，只能包含字母、数字和下划线
+		//     return /^[a-zA-Z]\w{5,17}$/.test(str)
+		case 'pwd': //密码以字母开头，长度在8~16之间，只能包含字母、数字和下划线
+			return /^[a-zA-Z]\w{7,15}$/.test(str);
+		case 'postal': //邮政编码
+			return /[1-9]\d{5}(?!\d)/.test(str);
+		case 'QQ': //QQ号
+			return /^[1-9][0-9]{4,9}$/.test(str);
+		case 'email': //邮箱
+			return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(str);
+		case 'money': //金额(小数点2位)
+			return /^\d*(?:\.\d{0,2})?$/.test(str);
+		case 'complexMoney':
+			return /(^\-?[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+		case 'URL': //网址
+			return /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/.test(str);
+		case 'IP': //IP
+			return /((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))/.test(str);
+		case 'date': //日期时间
+			return (
+				/^(\d{4})\-(\d{2})\-(\d{2}) (\d{2})(?:\:\d{2}|:(\d{2}):(\d{2}))$/.test(str) ||
+				/^(\d{4})\-(\d{2})\-(\d{2})$/.test(str)
+			);
+		case 'number': //数字
+			return /^[0-9]$/.test(str);
+		case 'positiveNumber': //正整数
+			return /^\+?[1-9][0-9]*$/.test(str);
+		case 'nonnegativePositive': //非负整数
+			return /^\+?[0-9]*$/.test(str);
+		case 'english': //英文
+			return /^[a-zA-Z]+$/.test(str);
+		case 'chinese': //中文
+			return /^[\u4E00-\u9FA5]+$/.test(str);
+		case 'lower': //小写
+			return /^[a-z]+$/.test(str);
+		case 'upper': //大写
+			return /^[A-Z]+$/.test(str);
+		case 'HTML': //HTML标记
+			return /<("[^"]*"|'[^']*'|[^'">])*>/.test(str);
+		case 'IP': //IP地址
+			return /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+				str
+			);
+		default:
+			return true;
+	}
+}		
+
+20.修改与查看的时候 进行提交（如果什么内容都没有改变，则无法提交 提示信息 如何确定你有没有修改且哪个修改）
+封装一个函数 在点击提交的时候调用
+
+  isEqual() {
+      var _arg = Array.prototype.slice.call(arguments);
+      console.log(_arg);
+      let flag = false;
+      let _server = this.serverData;//后台返回的所有用户信息（result）
+      let _userInfo = this.userInfo;//表达中需要的字段（'avatar', 'realName', 'nickName', 'sex', 'phone', 'email', 'address'）
+      console.log(_server);
+      console.log(_userInfo);
+      for (const i of _arg) {
+        _server[i] == _userInfo[i] ? null : (flag = true);
+      }
+      return flag;
+    },	
+
+ // 如果这些都没有变
+      let flag = this.isEqual('avatar', 'realName', 'nickName', 'sex', 'phone', 'email', 'address');
+      // 日期
+      if (this.userInfo.birthdate == this.serverData.birthdateStr && !flag) {
+        this.$toast({
+          message: `请确认有修改信息后提交`,
+          width: '9rem',
+          time: '2000',
+          position: 'middle',
+          type: 'text',
+        });
+      } else {
+        api.applytUserInfo(this.userInfo).then(({ respCode, respMsg, result }) => {
+          if (respCode == 0) {
+            this.$toast({
+              message: `信息修改成功`,
+              width: '9rem',
+              time: '2000',
+              position: 'middle',
+              type: 'text',
+            });
+            this.originData();
+          }
+        });
+      }
+    },
+
+21.使用原始方法上传图片
+<input type="file" accept="image/*" @change="change" ref="fileIpt" />
+后台接口需要传file
+ change() {
+      let formData = new window.FormData();
+      // let _imgUrl;
+      formData.append('file', this.$refs.fileIpt.files[0]);
+      // console.log(formData);
+      api.translateImgUrl(formData).then(({ respCode, respMsg, result }) => {
+        if (respCode == 0) {
+          this.userInfo.avatar = result.path;
+          api.applytUserInfo(this.userInfo).then(({ respCode, respMsg, result }) => {
+            if (respCode == 0) {
+              this.$toast({
+                message: `信息修改成功`,
+                width: '9rem',
+                time: '2000',
+                position: 'middle',
+                type: 'text',
+              });
+              this.originData();
+            }
+          });
+        }
+      });
+    },
+22.map()进行循环返回的结果就是想得到你想要的东西（如批量删除中 我想获取ID数组  一个数组中的数据是许多对象组成 而对象中又有好多属性 但我只需要其中一个 此时就可以使用map（）进行循环）
+var ids= this.deleteList.map(item => item.deviceId)
+返回的结果 就是deleteList中的deviceId  例如【25,23】
+var ids= this.deleteList.map(item => item.deviceId).jion()就是把数组【25,23】转换成25，23
+23.自定义loading
+ const loading = this.$loading({
+        lock: true,
+        text: '正在刷新...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.5)'
+      });
+loading.close()  //关闭
+23.input框只能输入数字且不能输入负数
+	<el-input class="myinput" oninput = "value=value.replace(/[^\d]/g,'')" clearable v-model.trim="formInline.subscriptionNumBegin" style="width:90px;padding:0px 2px 0px 4px;"></el-input>
+
+24.使用upload上传图片或文件 设置为必填项进行表单验证
+computed: {
+     pictureUrl: function() {
+      return this.fileList[this.fileList.length - 1]
+        ? this.fileList[this.fileList.length - 1].response.result.path  //半路径
+        : "";
+    },
+  },
+
+  successFn(res, file, fileList) {
+      this.fileList = fileList;
+      this.imgUrl = fileList[fileList.length - 1].response.result.url;//全路径
+      this.formInline.pictureUrl = this.pictureUrl;//很重要
+      console.log( this.formInline.pictureUrl);
+      this.$refs.createForm.validate();
+    },
+  //消息回显
+    getDetail() {
+      api.getPicBannerInfo({id:this.id}).then(({respCode,respMsg,result})=>{
+        if(respCode==0){
+         this.formInline.pictureName = result.pictureName
+         this.formInline.status= result.status
+          this.formInline.displayOrder= result.displayOrder
+          this.formInline.linkUrl= result.linkUrl
+          this.formInline.pictureUrl= result.pictureUrl
+          this.formInline.type= result.type
+           this.fileList = [//很重要
+            {
+              response: {
+                result: {
+                  path: result.pictureUri //半路径
+                }
+              },
+                 url:result.pictureUrl  //全路径
+            }
+          ];
+          this.imgUrl = result.pictureUrl;  //展示的图片
+          
+        }
+      })
+    },
+ created() {
+    this.opt = this.$route.query.type;
+    this.formInline = {
+      lessonLabelList: [],
+      lessonPrice: null,
+      mainlyFlag: "N",
+      pictureName:"",
+      status:null,
+      linkUrl:"",
+      displayOrder:"",
+      type:"",
+      pictureUrl:null  //否则没有效果
+    };
+    this.fileList = [];
+    this.$nextTick(() => {
+      // this.$refs.createForm.clearValidate();
+    });
+    // this.getLecturer();
+    if (this.opt == 0) {
+      this.getDetail()
+    }
+  },
+
+
+25.//   //判断数组是否相同
+      checkArrSame(arr, arr1) {
+        if (arr.length != arr1.length) {
+          return false;
+        } else {
+          let flag = true;
+          arr.forEach((m, i) => {
+            if (!arr1.includes(m)) {
+              flag = false;
+            }
+          });
+          return flag;
+        }
+      }
+  },
+watch: {
+    "role.roleIds"() {
+      this.role.isEquals = this.checkArrSame(
+        this.role.roleIds,
+        this.role.oldRoleIds
+      );
+      // this.role.isEquals = this.role.roleIds == this.role.oldRoleIds;
+    }
+  }
+    
+
+ 26.handleCommand(command) {
+      switch (command) {
+        case 'a':
+          this.$router.push({
+            path: '/profile'
+          });
+          break;
+        case 'b':
+          this.$router.push({
+            path: '/setting'
+          });
+          break;
+        case 'logout':
+          this.acLogout();
+          break;
+        // case 'updatePw':
+        //   this.updateBar();
+        //   break;
+        default:
+          break;
+      }
+    },
+27.设置loading
+ // const loading = this.$loading({
+      //   lock: true,
+      //   text: "加载中...",
+      //   spinner: "el-icon-loading",
+      //   background: "rgba(0, 0, 0, 0.5)"
+      // });
+
+// loading.close();
+
+28.锚点定位 （以组件的形式布局）
+	
+ handleClickTeacher() {
+      // 如果当前是在首页  那么跳到
+      if (this.$route.path === '/') {
+        document.getElementById('teacher-elite').scrollIntoView();
+      } else {
+        this.$router.push({
+          path: '/#teacher-elite'
+        });
+      }
+    },
+29.一维数组转换为二维数组
+function arrTrans(num, arr) {
+  // 一维数组转换为二维数组
+  const iconsArr = []; // 声明数组
+  arr.forEach((item, index) => {
+    const page = Math.floor(index / num); // 计算该元素为第几个素组内
+    if (!iconsArr[page]) {
+      // 判断是否存在
+      iconsArr[page] = [];
+    }
+    iconsArr[page].push(item);
+  });
+  return iconsArr;
+
+30.处理<el-breadcurm>和<el-tree>关联使用
+  @node-click= selectNodeClick(data, node, vm) {
+      debugger;
+      // 处理breadcrumb
+      let parent = node.parent,
+        breadcrumbList = [
+          {
+            id: node.id,
+            name: node.label
+          }
+        ];
+      while (parent && parent.label) {
+        breadcrumbList.unshift({
+          id: parent.id,
+          name: parent.label,
+        });
+        parent = parent.parent;
+      }
+      this.breadcrumb = [...breadcrumbList];
+根据后台接口返回的数据来展示el-tree
+// var departmentArr = res.result;
+	定义一个函数来循环遍历后台返回的数据
+         // var traverseTree = function(node) {
+          //   var child = node.children;
+          //   node.label = node.label;
+          //   if (child && child.length > 0) {
+          //     child.forEach(function(item) {
+          //       traverseTree(item); 递归遍历
+          //     });
+          //   }
+          // };
+          // departmentArr.forEach(function(data) {
+          //   traverseTree(data);
+          // });
+          // self.departments = departmentArr;
+31.文件管理模块（通过点击文件 然后进入这个文件当中-》通过传的当前文件的id去加载下一个文件的内容）
+  主要思路 ：就是通过当前文件的id 通过获取（截取）id来加载下一个文件
+clickFileName(row) {
+      debugger;
+      //  若是目录则进入目录
+      if (row.id && row.type!==3) {
+        this.$router.push({
+          query: {
+            filepath: `${this.filepath}/${row.id}`,
+            filetype: `${row.type}`
+          }
+        });
+      }
+然后通过路由来获取id this.$router.query.filepath
+获取当前文件的id即最后一个id
+fnTranslateFilePathToId() {
+      let fileId = DEFAULT_FILE_ID;
+      // 处理filePath 找到最后一个fileId
+      // 默认的id
+      if (this.filepath) {
+        // 如果存在通过 / 去分割filepath,并获取最后一个id
+        let ids = this.filepath.split("/").filter(item => item !== "");
+        // 最后一个id就是加载当前页面文件的id
+        fileId = ids[ids.length - 1];
+      }
+      this.fileId = fileId;
+    },
+当和面包屑关联使用时 
+watch: {
+    filepath: {
+      immediate: true,
+      handler(val) {
+        this.fnGetQueryNamesByDirIds(val);
+      }
+    }
+  },
+  methods: {
+//通过截取到的id来生成相应的文件名称
+    fnGetQueryNamesByDirIds(filepath) {
+      let _this = this;
+      // id数组
+      let fileIds = filepath
+        ? filepath.split("/").filter(item => item !== "")
+        : [];
+      let params = {
+        dirIds: fileIds
+      };
+      api.queryNamesByDirIds(params).then(({ respCode, respMsg, result }) => {
+        if (respCode !== "0") {
+          return;
+        }
+        if (!result) {
+          return;
+        }
+
+        let fileIdAndNames = [];
+        // 生成id和名称对象数组
+        result.forEach((name, index) => {
+          fileIdAndNames.push({
+            id: fileIds[index],
+            name: name
+          });
+        });
+        // 第三步： 根据ID 生成breadcrumb数据
+        // 默认的路径对象
+        let DEFAULT_TO = {
+          path: "/files",
+          query: {
+            filetype: this.filetype || 1
+          }
+        };
+        // 存放的是当前面包屑处理后的数据
+        let res = [
+          {
+            // 当前面包屑的 to 信息
+            path: DEFAULT_TO,
+            // 展示的名称
+            name: "全部文件"
+          }
+        ];
+        //  存放祖先路径
+        let _path = [];
+        for (let i = 0; i < fileIdAndNames.length; i++) {
+          let currentTo = JSON.parse(JSON.stringify(DEFAULT_TO));
+          if (fileIdAndNames[i]) {
+            // 在祖先路径数组中添加当前id
+            _path.push("/" + fileIdAndNames[i].id);
+            // 根据祖先路径数组生成当前面包屑的 路由路径  /xx/xx/xx
+            currentTo.query.filepath = _path.join("");
+            // 存放到展示数组中
+            res.push({
+              path: currentTo,
+              name: fileIdAndNames[i].name
+            });
+          }
+        }
+
+        _this.breadCrumbList = res;
+      });
+    }
+  }
+
+32.计算文件的大小
+//  计算文件大小
+    calculateFileSize(size) {
+      const B = 1024;
+      const KB = Math.pow(1024, 2);
+      const MB = Math.pow(1024, 3);
+      const GB = Math.pow(1024, 4);
+      if (!size) {
+        return "_";
+      } else if (size < KB) {
+        return (size / B).toFixed(0) + "KB";
+      } else if (size < MB) {
+        return (size / KB).toFixed(1) + "MB";
+      } else if (size < GB) {
+        return (size / MB).toFixed(2) + "GB";
+      } else {
+        return (size / GB).toFixed(3) + "TB";
+      }
+    },
+33.遍历循环（扁平化处理）
+    let  result = [
+   	{
+	name:12,
+	list:[
+	    {
+                   saleSum：“1223”
+
+                       }	
+                    ]
+               }  ， 
+{
+	name:12,
+	list:[
+	    {
+                   saleSum：“1223”
+
+                       }	
+                    ]
+               }  ， 
+   ]
+    let arr = []
+     const fn = result => {
+            result.forEach(ele => {
+              ele.list ? fn(ele.list) : arr.push(ele.saleSum);
+            });
+            return arr;
+          };
+
+const fn = (result, key, arr) => {
+	result.forEach(ele => {
+		ele.list ? fn(ele.list, key, arr) : arr.push(+ele[key].toFixed(2));
+			});
+		return arr;
+		};
+
+使用： fn(result, 'saleSum', []),
+
+34.当前路由对象实例 获取当前路由路径: this.$route
+      {name: "discovery", meta: {…}, path: "/discovery", hash: "", query: {…},?…}
+    监听当前页面的路由路径
+
+	watch:{
+	   $route:{
+	        handler(val,oldval){
+		this.fullPath=val.fullPath
+                              },
+	      deep:trie
+                }
+
+mounted(){this.changePath(this.$route.fullPath)
+根据当前路由路径 判断是否需要进行其它操作（添加类名等）目的防止跳到其它页面 页面刷新导致只能在原始页。
+                 changePath(path){
+		switch(path){
+		        case '/home':
+			this.isactive = 1
+			break;
+		       case '/discovery':
+			this.isactive = 2
+			break;
+                                          defalue:
+			this.isactive = 1
+ 			break;
+                                   }
+                      }
